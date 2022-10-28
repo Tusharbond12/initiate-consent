@@ -1,0 +1,5 @@
+com/hdfc/feignClient/FeignService.class
+com/hdfc/response/ResponseObject.class
+com/hdfc/initiateconsentrequest/InitiateconsentrequestApplication.class
+com/hdfc/controller/ConsentController.class
+com/hdfc/request/RequestObject.class

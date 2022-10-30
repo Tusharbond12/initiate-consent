@@ -1,4 +1,4 @@
-package com.hdfc.response;
+package com.demo.response;
 
 
 import lombok.Data;

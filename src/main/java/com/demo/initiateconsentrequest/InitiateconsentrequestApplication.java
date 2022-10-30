@@ -1,4 +1,4 @@
-package com.hdfc.initiateconsentrequest;
+package com.demo.initiateconsentrequest;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -7,8 +7,8 @@ import org.springframework.context.annotation.ComponentScan;
 
 
 @SpringBootApplication
-@ComponentScan({"com.hdfc.controller"})
-@EnableFeignClients("com.hdfc.feignClient")
+@ComponentScan({"com.demo.controller"})
+@EnableFeignClients("com.demo.feignClient")
 public class InitiateconsentrequestApplication {
 
 	public static void main(String[] args) {

@@ -1,8 +1,8 @@
-package com.hdfc.feignClient;
+package com.demo.feignClient;
 
 
-import com.hdfc.request.RequestObject;
-import com.hdfc.response.ResponseObject;
+import com.demo.request.RequestObject;
+import com.demo.response.ResponseObject;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

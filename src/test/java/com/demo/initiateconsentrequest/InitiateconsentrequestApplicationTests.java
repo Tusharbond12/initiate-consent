@@ -1,4 +1,4 @@
-package com.hdfc.initiateconsentrequest;
+package com.demo.initiateconsentrequest;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

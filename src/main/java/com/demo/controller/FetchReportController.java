@@ -29,7 +29,7 @@ public class FetchReportController {
     FeignService feignService;
 
     @RequestMapping("/hello-world")
-    public String hello() {
+    public String helloWorld() {
         return "Hellooooo ";
     }
 

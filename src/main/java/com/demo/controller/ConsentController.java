@@ -13,10 +13,10 @@ public class ConsentController {
     FeignService feignService;
 
     @PostMapping("/createConsent")
-    public ResponseObject getResponse(@RequestBody RequestObject requestObject ,@RequestHeader(name = "api_key") String api_key,
+    public ResponseObject getConsent(@RequestBody RequestObject requestObject ,@RequestHeader(name = "api_key") String api_key,
                                       @RequestHeader(name = "org_id") String org_id)
     {
-        return feignService.getResponse(requestObject,api_key,org_id);
+        return feignService.getConsent(requestObject,api_key,org_id);
     }
 
     @RequestMapping("/hello")

@@ -8,11 +8,16 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.XML;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.WritableResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.*;
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -28,6 +33,23 @@ public class FetchReportController {
     @Autowired
     FeignService feignService;
 
+    @Value("gs://${gcs-resource-test-bucket}/FirstProgram.java")
+    private Resource gcsFile;
+
+
+    @PostMapping("/writeFile")
+    public String writeGcs(@RequestBody String data) throws IOException {
+        try (OutputStream os = ((WritableResource) this.gcsFile).getOutputStream()) {
+            os.write(data.getBytes());
+        }
+        return "file was updated\n";
+    }
+
+    @GetMapping("/getFile")
+    public String readGcsFile() throws IOException {
+        return StreamUtils.copyToString(this.gcsFile.getInputStream(), Charset.defaultCharset()) + "\n";
+    }
+
     @RequestMapping("/hello-world")
     public String helloWorld() {
         return "Hellooooo ";
@@ -35,6 +57,7 @@ public class FetchReportController {
 
     // cee922276e91f9109d8f01a1eff1370dd151e995a69090f266a43220773a8770
     // demo
+
 
     @PostMapping("/fetchReport")
     public ResponseEntity<Object> getResponse(@RequestBody RequestObjectReport requestObject, @RequestHeader(name = "api_key") String api_key,

@@ -3,6 +3,9 @@ package com.demo.controller;
 import com.demo.feignClient.FeignService;
 import com.demo.request.RequestObject;
 import com.demo.request.RequestObjectReport;
+import com.google.cloud.storage.BlobId;
+import com.google.cloud.storage.BlobInfo;
+import com.google.cloud.storage.Storage;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -18,6 +21,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.*;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -28,6 +34,8 @@ import static com.demo.constants.Constants.OUT_DIR;
 @RestController
 public class FetchReportController {
 
+   @Autowired
+   private Storage storage;
 
 
     @Autowired
@@ -35,6 +43,31 @@ public class FetchReportController {
 
     @Value("gs://${gcs-resource-test-bucket}/FirstProgram.java")
     private Resource gcsFile;
+    @GetMapping("/send-data")
+    public String sendData(@RequestBody RequestObjectReport requestObjectReport) throws IOException
+    {
+       String txnId=requestObjectReport.getTxnId();
+
+        String path = OUT_DIR + File.separator + txnId + File.separator;
+
+        File jsonPath = new File(path + "json");
+        System.out.println(jsonPath);
+        String[] jsonFiles=jsonPath.list();
+        if(jsonFiles == null )
+        {
+            return "Code Failed";
+        }
+        for(String jsonFile:jsonFiles )
+        {
+        BlobId blobId=BlobId.of("my-deployment-bucket",path+"json"+File.separator+jsonFile);
+        BlobInfo info=BlobInfo.newBuilder(blobId).build();
+        File file=new File(path+"json"+File.separator+jsonFile);
+        byte[] arr= Files.readAllBytes(Paths.get(file.toURI()));
+        storage.create(info,arr);
+
+        }
+        return "File Uploaded Successfully ";
+    }
 
 
     @PostMapping("/writeFile")
@@ -47,6 +80,7 @@ public class FetchReportController {
 
     @GetMapping("/getFile")
     public String readGcsFile() throws IOException {
+
         return StreamUtils.copyToString(this.gcsFile.getInputStream(), Charset.defaultCharset()) + "\n";
     }
 
@@ -68,7 +102,6 @@ public class FetchReportController {
         unzipAndExtractXMLReports(perfiosData, requestObject.getTxnId());
         JSONObject obj=xmlFileToJson(requestObject.getTxnId());
         JSONArray jsArr = new JSONArray();
-        jsArr.put(obj.toMap());
         return new ResponseEntity<>(obj.toMap(), HttpStatus.OK);
 
 

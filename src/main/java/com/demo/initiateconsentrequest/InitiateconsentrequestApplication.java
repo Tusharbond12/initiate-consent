@@ -7,7 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 
 @SpringBootApplication
-@ComponentScan({"com.demo.controller"})
+@ComponentScan({"com.demo.controller","com.demo.utilityFunctionsService"})
 @EnableFeignClients("com.demo.feignClient")
 public class InitiateconsentrequestApplication {
 
